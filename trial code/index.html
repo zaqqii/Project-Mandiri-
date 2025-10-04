@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="Drunk Text" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Karaoke - Drunk Text by Henry Moodoe</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+    body {
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        font-family: 'Poppins', sans-serif;
+        color: #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 350px;
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        max-height: 600px;
+        display: flex;
+        flex-direction: column;
+    }
+    h1 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 5px;
+        color: #ffcc00;
+        text-shadow: 0 0 5px rgba(255,204,0, 0.8);
+    }
+    h2 {
+        font-weight: 300;
+        color: #ffd966;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    ul.lyrics {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+    ul.lyrics li {
+        padding: 6px 5px;
+        font-size: 1rem;
+        line-height: 1.4;
+        color: #ccc;
+        transition: color 0.5s, background-color 0.5s;
+        border-radius: 5px;
+    }
+    ul.lyrics li.active {
+        color: #fff;
+        background: #ffcc00;
+        font-weight: 600;
+        box-shadow: 0 0 8px #ffcc00;
+    }
+    .controls {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    button {
+        background: #ffcc00;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 25px;
+        font-weight: 600;
+        color: #333;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(255,204,0,0.6);
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #d4a700;
+    }
+</style>
+</head>
+<body>
+<div class="container" role="main" tabindex="0">
+    <h1>Drunk Text</h1>
+    <h2>Henry Moodie</h2>
+    <ul class="lyrics" id="lyricsList" aria-live="polite" aria-atomic="true">
+        <li> When I walked you home</li>
+        <li>That's when I nearly said it</li>
+        <li>But then said "Forget it" and froze</li>
+        <li>Do you remember?</li>
+        <li>You probably don't</li>
+        <li>'Cause the sparks in the sky</li>
+        <li>Took a hold of your eyes while we spoke</li>
+
+        <li>Yesterday, drank way too much</li>
+        <li>And stayed up too late</li>
+        <li>Started to write what I wanna say </li>
+        <li>Deleted the message, but I still remember it said</li>
+
+        <li>I wish I was who you drunk texted at midnight</li>
+        <li>Wish I was the reason you stay up 'til 3</li>
+        <li>And you can't fall asleep</li>
+        <li>Waiting for me to reply</li>
+        <li>I wish I was more than just someone you walk by</li>
+        <li>Wish I wasn't scared to be honest and open</li>
+        <li>Instead of just hoping</li>
+        <li>You'd feel what I'm feeling inside</li>
+        
+        <li>April the 7th</li>
+        <li>And nothing has changed</li>
+        <li>It's hard to get by</li>
+        <li>When you're still on my mind everyday</li>
+        <li>Sometimes I question</li>
+        <li>If you feel the same?</li>
+        <li>Do we make stupid jokes?</li>
+        <li>Trying to hide that we're both too afraid to say</li>
+
+        <li>I wish I was who you drunk texted at midnight</li>
+        <li>Wish I was the reason you stay up 'til 3</li>
+        <li>And you can't fall asleep</li>
+        <li>Waiting for me to reply</li>
+        <li>I wish I was more than just someone you walk by</li>
+        <li>Wish I wasn't scared to be honest and open</li>
+        <li>Instead of just hoping</li>
+        <li>You'd feel what I'm feeling inside</li>
+
+        <li>Oh, and here we go again</li>
+        <li>Destroy myself to keep a friend</li>
+        <li>Hiding away 'cause I was afraid you'd say no</li>
+        <li>I wonder if I cross your mind</li>
+        <li>Half as much as you do mine</li>
+        <li>If I tell you the truth</li>
+        <li>What will I lose?</li>
+        <li>I don't know</li>
+
+        <li>I wish I sent you that drunk text at midnight</li>
+        <li>I was just scared it would ruin our friendship</li>
+        <li>But I really meant it</li>
+        <lil>I wonder how you would reply</lil>
+
+    </ul>
+
+    <div class="controls">
+        <button id="startBtn" aria-label="Start karaoke lyrics">Start</button>
+        <button id="pauseBtn" aria-label="Pause karaoke lyrics" disabled>Pause</button>
+        <button id="resetBtn" aria-label="Reset karaoke lyrics">Reset</button>
+    </div>
+</div>
+
+<script>
+    const lyricsList = document.getElementById('lyricsList');
+    const lines = lyricsList.getElementsByTagName('li');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let currentIndex = -1;
+    let intervalId = null;
+    const highlightDuration = 3000; // ms per line
+
+    function highlightLine(index) {
+        for (let i = 0; i < lines.length; i++) {
+            lines[i].classList.remove('active');
+        }
+        if (index >= 0 && index < lines.length) {
+            lines[index].classList.add('active');
+            lines[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function startKaraoke() {
+        if (intervalId) return; // already running
+        if (currentIndex >= lines.length - 1) {
+            currentIndex = -1; // restart from beginning
+        }
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+        resetBtn.disabled = false;
+        intervalId = setInterval(() => {
+            currentIndex++;
+            if (currentIndex >= lines.length) {
+                stopKaraoke();
+                return;
+            }
+            highlightLine(currentIndex);
+        }, highlightDuration);
+    }
+
+    function pauseKaraoke() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+    }
+
+    function stopKaraoke() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+        currentIndex = -1;
+        highlightLine(-1);
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        resetBtn.disabled = false;
+    }
+
+    function resetKaraoke() {
+        stopKaraoke();
+        highlightLine(-1);
+    }
+
+    startBtn.addEventListener('click', startKaraoke);
+    pauseBtn.addEventListener('click', pauseKaraoke);
+    resetBtn.addEventListener('click', resetKaraoke);
+    
+    // Make it fit inside 600px height by limiting container max height and scrolling lines
+</script>
+</body>
+</html>

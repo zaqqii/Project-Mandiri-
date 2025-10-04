@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journey Map - FoodApp User Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .persona-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .journey-container {
+            padding: 30px;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .phase-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.05));
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .phase1 { border-left-color: #FF6B6B; }
+        .phase2 { border-left-color: #4ECDC4; }
+        .phase3 { border-left-color: #45B7D1; }
+        .phase4 { border-left-color: #96CEB4; }
+        .phase5 { border-left-color: #FFEAA7; }
+        .phase6 { border-left-color: #DDA0DD; }
+        .phase7 { border-left-color: #98D8C8; }
+        .phase8 { border-left-color: #A8E6CF; }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .phase-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .phase1 .phase-number { background: #FF6B6B; }
+        .phase2 .phase-number { background: #4ECDC4; }
+        .phase3 .phase-number { background: #45B7D1; }
+        .phase4 .phase-number { background: #96CEB4; }
+        .phase5 .phase-number { background: #FFEAA7; color: #333; }
+        .phase6 .phase-number { background: #DDA0DD; }
+        .phase7 .phase-number { background: #98D8C8; }
+        .phase8 .phase-number { background: #A8E6CF; }
+
+        .phase-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .phase-time {
+            background: #f8f9fa;
+            color: #666;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .activities-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .activities-list li {
+            background: #f8f9fa;
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            border-left: 3px solid #ddd;
+        }
+
+        .dialog-internal {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-style: italic;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .dialog-internal::before {
+            content: '"';
+            font-size: 3em;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+
+        .pain-points {
+            background: #ffe6e6;
+            border: 1px solid #ffcccb;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .pain-points ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .pain-points li {
+            color: #d63031;
+            margin: 5px 0;
+        }
+
+        .positive-points {
+            background: #e6ffe6;
+            border: 1px solid #ccffcc;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .positive-points ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .positive-points li {
+            color: #00b894;
+            margin: 5px 0;
+        }
+
+        .emotion-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .emotion-frustrated {
+            background: #ffe6e6;
+            color: #d63031;
+        }
+
+        .emotion-neutral {
+            background: #fff4e6;
+            color: #e17055;
+        }
+
+        .emotion-satisfied {
+            background: #e6ffe6;
+            color: #00b894;
+        }
+
+        .emotion-anxious {
+            background: #ffeaa7;
+            color: #fdcb6e;
+        }
+
+        .insights-section {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+
+        .insights-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .insight-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid rgba(255,255,255,0.5);
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #FF6B6B, #A8E6CF);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-left: 50px;
+            margin-bottom: 15px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ECDC4;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #4ECDC4;
+        }
+
+        @media (max-width: 768px) {
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ FoodApp Journey Map</h1>
+            <div class="persona-info">
+                <strong>Persona:</strong> Rina (20 tahun, Mahasiswa) | 
+                <strong>Skenario:</strong> Memesan makanan saat jam istirahat kuliah | 
+                <strong>Durasi Total:</strong> 38 menit
+            </div>
+        </div>
+
+        <div class="journey-container">
+            <div class="phases-grid">
+                
+                <!-- Phase 1 -->
+                <div class="phase-card phase1">
+                    <div class="phase-header">
+                        <div class="phase-number">1</div>
+                        <div class="phase-title">Awareness & Trigger</div>
+                        <span class="emotion-indicator emotion-frustrated">Frustrated</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:30 - 12:32 (2 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">📍 Situasi</div>
+                        <p>Rina keluar kelas, melihat antrean panjang di kantin. Teman menunjukkan aplikasi FoodApp.</p>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Wah antrean kantin parah banget... Eh iya, kemarin Dinda bilang ada aplikasi buat pesan makanan. Coba ah, daripada ngantri.
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⚠️ Pain Points</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>First impression aplikasi harus kuat</li>
+                                <li>Koneksi kampus lambat untuk download</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card phase2">
+                    <div class="phase-header">
+                        <div class="phase-number">2</div>
+                        <div class="phase-title">Discovery & Download</div>
+                        <span class="emotion-indicator emotion-neutral">Neutral</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:32 - 12:35 (3 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">🔍 Aktivitas</div>
+                        <ul class="activities-list">
+                            <li>Search "FoodApp" di Play Store (30 detik)</li>
+                            <li>Baca rating & review (1 menit)</li>
+                            <li>Download & install (1.5 menit)</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⚠️ Pain Points</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>Aplikasi size besar</li>
+                                <li>Review negatif tentang bug/crash</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card phase3">
+                    <div class="phase-header">
+                        <div class="phase-number">3</div>
+                        <div class="phase-title">Onboarding & Registration</div>
+                        <span class="emotion-indicator emotion-frustrated">Frustrated</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:35 - 12:38 (3 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">📱 User Flow</div>
+                        <ul class="activities-list">
+                            <li>Skip tutorial (buru-buru)</li>
+                            <li>Daftar dengan Google (cepat)</li>
+                            <li>Allow GPS permission</li>
+                            <li>Skip preferensi basic</li>
+                        </ul>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Wah banyak banget form-nya... untung bisa login pakai Google. Eh ini minta akses lokasi, ya udah allow aja biar langsung ketemu kantin mana yang deket.
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⚠️ Pain Points</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>Tutorial terlalu panjang</li>
+                                <li>Form registrasi ribet</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-card phase4">
+                    <div class="phase-header">
+                        <div class="phase-number">4</div>
+                        <div class="phase-title">Menu Browsing</div>
+                        <span class="emotion-indicator emotion-frustrated">Overwhelmed</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:38 - 12:42 (4 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">🍽️ User Behavior</div>
+                        <ul class="activities-list">
+                            <li>Filter lokasi "Kantin Gedung A"</li>
+                            <li>Browse kategori "Makan Siang"</li>
+                            <li>Bingung pilih dari 15+ menu</li>
+                            <li>Klik satu-satu untuk detail</li>
+                        </ul>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Aduh banyak banget pilihannya... yang mana ya yang enak? Harganya kok ga kelihatan dari awal... eh ini ayam geprek berapa sih? Kok fotonya kecil banget...
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⚠️ Major Pain Points</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>Cognitive overload (15+ pilihan)</li>
+                                <li>Foto menu tidak jelas/kecil</li>
+                                <li>Harga tidak prominent</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div class="phase-card phase5">
+                    <div class="phase-header">
+                        <div class="phase-number">5</div>
+                        <div class="phase-title">Decision Making</div>
+                        <span class="emotion-indicator emotion-neutral">Decisive</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:42 - 12:45 (3 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">🎯 Decision Process</div>
+                        <ul class="activities-list">
+                            <li>Bandingkan 3-4 menu dalam budget</li>
+                            <li>Pilih foto yang menarik</li>
+                            <li>Pilih makanan familiar</li>
+                            <li>Cek customization (level pedas)</li>
+                        </ul>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Ya udah deh ayam geprek aja, kayaknya aman. Eh bisa pilih level pedasnya, oke pedas sedang aja.
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">✅ Final Choice</div>
+                        <div class="positive-points">
+                            <ul>
+                                <li>Nasi Ayam Geprek (Rp 18.000)</li>
+                                <li>Customization: Pedas sedang</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 6 -->
+                <div class="phase-card phase6">
+                    <div class="phase-header">
+                        <div class="phase-number">6</div>
+                        <div class="phase-title">Checkout Process</div>
+                        <span class="emotion-indicator emotion-anxious">Anxious</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:45 - 12:48 (3 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">💳 Checkout Steps</div>
+                        <ul class="activities-list">
+                            <li>Review cart: 1x Nasi Ayam Geprek</li>
+                            <li>Tambah notes: "Tanpa timun"</li>
+                            <li>Pilih payment: GoPay</li>
+                            <li>Pilih pickup (lebih cepat)</li>
+                            <li>Time slot: 13:00-13:10</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">🚨 Technical Issue</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>Aplikasi hang 10 detik saat checkout</li>
+                                <li>Harus refresh sekali</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Lah kok loading terus... jangan-jangan error... coba refresh deh... fiuh untung jalan lagi. Total 18ribu ya, oke lah.
+                    </div>
+                </div>
+
+                <!-- Phase 7 -->
+                <div class="phase-card phase7">
+                    <div class="phase-header">
+                        <div class="phase-number">7</div>
+                        <div class="phase-title">Waiting & Tracking</div>
+                        <span class="emotion-indicator emotion-anxious">Impatient</span>
+                    </div>
+                    <div class="phase-time">⏰ 12:48 - 13:05 (17 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">📊 Status Timeline</div>
+                        <div class="timeline">
+                            <div class="timeline-item">12:48 - "Pesanan dikonfirmasi"</div>
+                            <div class="timeline-item">12:52 - "Sedang dimasak"</div>
+                            <div class="timeline-item">13:03 - "Siap diambil"</div>
+                            <div class="timeline-item">13:05 - Rina sampai di counter</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⚠️ Pain Points</div>
+                        <div class="pain-points">
+                            <ul>
+                                <li>Estimasi 15 menit, aktual 17 menit</li>
+                                <li>Notifikasi "siap diambil" telat</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Katanya 15 menit, kok belum ada notif ya... eh udah 17 menit nih... oh iya baru sekarang bilang siap diambil.
+                    </div>
+                </div>
+
+                <!-- Phase 8 -->
+                <div class="phase-card phase8">
+                    <div class="phase-header">
+                        <div class="phase-number">8</div>
+                        <div class="phase-title">Pickup Experience</div>
+                        <span class="emotion-indicator emotion-satisfied">Satisfied</span>
+                    </div>
+                    <div class="phase-time">⏰ 13:05 - 13:08 (3 menit)</div>
+                    
+                    <div class="section">
+                        <div class="section-title">📦 Pickup Process</div>
+                        <ul class="activities-list">
+                            <li>Show Order ID screenshot</li>
+                            <li>Staff verifikasi manual</li>
+                            <li>Quality check: makanan hangat</li>
+                            <li>Complete order di app</li>
+                        </ul>
+                    </div>
+
+                    <div class="dialog-internal">
+                        Eh ini makanannya masih anget, oke lah. Packagingnya juga rapi. Next time kayaknya bisa pakai app ini lagi deh.
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">✅ Positive Points</div>
+                        <div class="positive-points">
+                            <ul>
+                                <li>Makanan masih hangat</li>
+                                <li>Packaging rapi</li>
+                                <li>Berhasil avoid antrean</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="insights-section">
+            <h2 class="insights-title">🎯 Key Insights & Actionable Solutions</h2>
+            <div class="insights-grid">
+                <div class="insight-item">
+                    <h3>🕐 Time Pressure Impact</h3>
+                    <p>Mahasiswa sangat sensitif terhadap waktu. Friction kecil jadi masalah besar saat jam istirahat terbatas.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>🔧 Technical Reliability</h3>
+                    <p>Bug saat checkout = kehilangan kepercayaan. Perlu stability testing intensif pada payment flow.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>🍽️ Menu Decision Bottleneck</h3>
+                    <p>4 menit untuk pilih menu = terlalu lama. Perlu smart curation dan recommendation system.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>📱 First-Time UX</h3>
+                    <p>Onboarding harus optional & skippable. User buru-buru tidak mau tutorial panjang.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>⏱️ Expectation Management</h3>
+                    <p>Gap estimasi vs aktual (15 vs 17 menit) menciptakan anxiety. Perlu buffer time yang realistis.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>📊 Overall Satisfaction</h3>
+                    <p>Rating: 7/10. Willing to use again dengan catatan perbaikan technical issues.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
